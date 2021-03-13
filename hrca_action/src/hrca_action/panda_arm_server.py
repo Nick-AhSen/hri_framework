@@ -104,7 +104,8 @@ class ArmServer(object):
                 pick_object_pose = copy.deepcopy(userdata.pick_object_pose)
                 pick_object_pose.pose.position.z = pick_object_pose.pose.position.z + userdata.hover_distance + 0.1
 
-                plan = self._arm.plan_to_pose_cartesian(pick_object_pose)
+                # plan = self._arm.plan_to_pose_cartesian(pick_object_pose)
+                plan = self._arm.plan_to_pose_optimized(pick_object_pose, 10)
                 #hover_success = self._arm.execute_plan_safe(plan)
                 hover_success = self._arm.execute_plan_unsafe(plan)
                 #hover_success = self._arm.move_to_pose(pick_object_pose)
@@ -361,7 +362,7 @@ class ArmServer(object):
 
 if __name__ == '__main__':
     rospy.init_node('panda_arm_server')
-    panda_arm = PandaArm(simulation=False)
+    panda_arm = PandaArm(simulation=True)
     panda_arm.set_end_effector_link("panda_gripper_center")
     panda_arm.moveit_arm_group.set_pose_reference_frame("/panda_link0")
     panda_arm.move_to_home()
